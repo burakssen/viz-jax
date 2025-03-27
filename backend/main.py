@@ -17,9 +17,5 @@ def get_flattened_data():
     }
     return jsonify(response)
 
-@app.route('/', methods=['GET'])
-def home():
-    return "Welcome to Flattened Data Server! Visit /step to retrieve data."
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)
