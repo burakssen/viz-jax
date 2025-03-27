@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_service
+    ports:
+      - "5001:8000" # Exposing backend service on port 5001 locally
+    volumes:
+      - ./backend:/app # Mapping backend code to container
+    working_dir: /app
+    depends_on:
+      - frontend # Ensuring frontend is up before backend starts
+    networks:
+      - app-network # Connect to the custom network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_service
+    ports:
+      - "5173:5173" # Exposing frontend service on port 5173 locally
+    volumes:
+      - ./frontend:/app # Mapping frontend code to container
+      - /app/node_modules # Ensuring node_modules persists between builds
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network # Connect to the custom network
+
+networks:
+  app-network:
+    driver: bridge # Using the default bridge driver for the network
